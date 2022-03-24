@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <title>게시판</title>
+    <link rel="stylesheet" href="/css/css.css">
+
+    <script>
+        const quaryString = window.location.search; // 전체 URL중 쿼리스트링(파라미터)만 반환
+        // console.log(quaryString) // ?userId=3
+        const urlParams = new URLSearchParams(quaryString); // URL의 파라미터를 다룰 수 있는 객체인 URLSearchParams 객체로 변환
+        // console.log(urlParams)
+        const userId = urlParams.get("userId"); // URL의 쿼리스트링에서 '파라미터명'으로 조회된 첫번째 값을 리턴
+        // console.log(userId)
+
+        // var s = document.getElementById('board_view').value;
+        $(document).ready(function () {
+            view();
+        //     // http://localhost:3000/view.html=userId=19
+        //     // test[0] = http://localhost:3000/view.html
+        //     // test[1] =userId=19
+        //     // userId[0] = userId
+        //     // userId[1] = 19
+        //     // var test = location.href.split("?");
+        //     // var userId  = test[1].split("=");
+        //     // view(userId[1]);
+        });
+
+//list.html - > view.html - > router - > view.html
+        function view(){
+
+            $.ajax({
+                type: 'POST',
+                url: `/api/view/${userId}`, 
+                data: {userId : userId},
+                success: function (response) {
+                    var viewData = response.numId;
+                    console.log(viewData)
+                    
+                    $("#title").val(viewData.title);
+                    $("#userId").val(viewData.userId);
+                    $("#name").val(viewData.name);
+                    //$("#data").val(viewData.data);
+                    $("#comment").text(viewData.comment);
+                    //let rows = response['boards']
+                    //console.log(rows)
+                    $("#password2").val(viewData.password);
+                }
+            })
+        }
+        // 수정 버튼 함수, button click --> disabled :false 실행, savebtn show
+        function sendModify(){
+            $("#title").attr("disabled", false);
+            $("#userId").attr("disabled", false);
+            $("#name").attr("disabled", false);
+            //$("#data").val(viewData.data);
+            // $("#password").attr("disabled", false);
+            $("#comment").attr("disabled", false);
+            $("#modifyBtn").hide();
+            $("#saveBtn").show();
+        }
+        function sendSave(){
+            var userId = $('#userId').val();
+            var title = $('#title').val();
+            var name = $('#name').val();
+            var comment = $('#comment').val();
+            var password = $('#password').val();
+            var password2 = $('#password2').val();
+            if(password!=password2){
+                alert("패스워드를 확인해주세요.");
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                url: `/api/modify/${userId}`, //routes/board --> write get
+                // dataType : JSON,
+                data: {
+                    userId : userId,
+                    title : title,
+                    name : name,
+                    comment : comment,
+                    password : password},
+                success: function (response) {
+                    alert("수정!")
+                    location.href = 'list.html'     // 새로고침    
+                }
+            })
+        }
+
+        // view.html --> router/delete --> ajax로 삭제 요청
+        function sendDelete(){
+            var password = $('#password').val();
+            var password2 = $('#password2').val();
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/delete/${userId}`,
+                data: {userId : userId},
+                success: function (response) {
+                    // console.log(response)
+                    if(password!=password2){
+                alert("패스워드를 확인해주세요.");
+                return;
+            }
+                    alert("삭제완료");
+                    location.href="list.html"; // page 새로고침
+                }
+            })
+        }   
+
+    </script> 
+
+</head>
+<body>
+    <input type="hidden"  id="userId" >
+    <input type="hidden"  id="password2" >
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>게시판</strong>
+        </div>
+        <div class="board_write_wrap">
+            <div class="board_write">
+                <div class="title">
+                    <dl>
+                        <dt>제목</dt>
+                        <dd><input type="text" placeholder="제목 입력" id="title" disabled></dd>
+                    </dl>
+                </div>
+                <div class="info">
+                    <dl>
+                        <dt>글쓴이</dt>
+                        <dd><input type="text" placeholder="글쓴이 입력" id="name" disabled></dd>
+                    </dl>
+                    <dl>
+                        <dt>비밀번호</dt>
+                        <dd><input type="password" placeholder="비밀번호 입력" id="password"></dd>
+                    </dl>
+                </div>
+                <div class="cont">
+                    <textarea placeholder="내용 입력" id="comment" disabled></textarea>
+                </div>
+            </div>
+            <div class="bt_wrap">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  onclick="sendModify()" id="modifyBtn">수정하기</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  onclick="sendSave()" id="saveBtn" style="display:none">저장하기</button>
+                <button type="button" onclick="sendDelete()">삭제</button>
+                <button type="button" onclick="location.href='list.html';">취소</button>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
