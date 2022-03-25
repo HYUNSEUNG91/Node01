@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const createEnvironment = require("schema/lib/environment");
+
 
 //mongoose 데이터 모델링 -> Schema 객체 사용 -> Document 사용
 const boardSchema = new mongoose.Schema({
