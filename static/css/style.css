@@ -23,6 +23,8 @@ a {
 
 .board_title {
     margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .board_title strong {
@@ -279,3 +281,38 @@ a {
     border: 0;
     resize: vertical;
 }
+.login-btn{
+    display: inline-block;
+    min-width: 80px;
+    margin-left: 10px;
+    padding: 10px;
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+    border-radius: 2px;
+    font-size: 1.4rem;
+    
+}
+
+.jumbotron {
+  border-radius: 0;
+}
+
+.input-group-text {
+  border-right-color: white;
+  background-color: white;
+}
+
+.input-group > input {
+  border-left-color: white;
+}
+
+.jumbotron {
+  border-radius: 0;
+}
+
+.wrap {
+    width: 1000px;
+    margin: auto;
+}
+

@@ -2,8 +2,10 @@ const express = require("express");
 const connect = require("./schemas/write");
 const bodyParser = require('body-parser');
 const app = express();
+const router = express.Router();
 const port = 3000;
 connect();
+
 
 // MongoDB 연결
 const mongoose = require("mongoose");
@@ -22,8 +24,9 @@ var db = mongoose
 
 
 
-const writeRouter = require("./routes/board"); // ./는 상대경로. routes에 goods 파일 가져옴
-const createEnvironment = require("schema/lib/environment");
+const writeRouter = require("./routes/board"); // ./는 상대경로. routes에 board 파일 가져옴
+const userRouter = require("./routes/user_info")
+
 
 
 //request 로그 남기는 미들웨어
@@ -38,8 +41,8 @@ app.use(express.static("static"))
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(requestMiddleware);
-
-app.use("/api", [writeRouter]);
+app.use("/api", [writeRouter, userRouter]);
+app.use("/api", express.urlencoded({ extended: false }), router);
 //api 라우터로 들어왔을때만 goodsRouter를 실행한다. [goodsRouter,..] 처럼 2개도 가능.
 
 //view 경로 설정
@@ -52,12 +55,11 @@ app.set('view engine', 'html');
 //JS 외부에서 불러오기
 app.use('/js', express.static(__dirname + "/js"));
 
-// main page
+// main_List page
 app.get("/", async (req, res) => {
     console.log("main_page")    
     bodyParser.json()
-    res.sendFile(__dirname + "/static/main.html");
-   
+    res.sendFile(__dirname + "/static/list.html");
 });
 
 // write page
@@ -68,53 +70,19 @@ app.get("/write", async (req, res) => {
     res.sendFile(__dirname + "/static/write.html");
 });
 
-
-// list_page
-app.get("/list", async (req, res) => {
+// login_page -->login page 이동 시 토근 삭제(무한루프 방지)
+app.get("/login", async (req, res) => {
     console.log("list_page")
     bodyParser.json()
-    res.sendFile(__dirname + "/static/list.html");
+    res.sendFile(__dirname + "/static/login.html");
 });
 
-// // view_page
-// app.get("/view", async (req, res) => {
-//     console.log("view_page")
-//     bodyParser.json()
-//     res.sendFile(__dirname + "/static/view.html");
-// });
-
-// view_detail_page
-// app.get("/view/:userId", async (req, res) => {
-//     console.log("view_detail_page")
-//     const {userId} = req.params;
-//     // console.log({userId})
-//     const numId = await connect.find({userId});
-//     console.log(numId)
-//     // bodyParser.json()
-//     // res.json({
-//     //     numId : {numId}
-//     // });
-//     res.sendFile(__dirname + "/static/view.html");
-// });
-
-// app.get("/view/:userId", async (req, res) => {
-//     console.log("view/:userId")
-//     bodyParser.json()
-//     res.sendFile(__dirname + "/static/view/:userId.html");
-// });
-
-// view_detail_page
-// app.get("/view/:userId", async (req, res) => {
-//     const {userId} = req.params;
-//     console.log({userId});
-//     const numId = await connect.find({userId});
-//     console.log(numId);
-//     res.json({
-//       numId : numId
-//     })
-// });
-
-
+// register_page
+app.get("/register", async (req, res) => {
+    console.log("list_page")
+    bodyParser.json()
+    res.sendFile(__dirname + "/static/register.html");
+});
 
 
 app.listen(port, () => {
