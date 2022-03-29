@@ -3,15 +3,18 @@ const mongoose = require("mongoose");
 
 //mongoose 데이터 모델링 -> Schema 객체 사용 -> Document 사용
 const boardSchema = new mongoose.Schema({
-  userId: {
+  boardNum : {
     type: Number,
-    required: true,
+    require: true,
     unique: true,
   },
-  name: {
+  userNum : {
+    type: Number,
+    require: true,
+  },
+  nickname: {
     type: String,
     required: true,
-    
   },
   title: {
     type: String,

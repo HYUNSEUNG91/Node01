@@ -10,23 +10,49 @@
     <title>글쓰기</title>
     <link rel="stylesheet" href="css/css.css">
     <script>
+        $(document).ready(function () {
+            if(localStorage.getItem("token")){ //로그인 성공 후 화면 시작 시 getLoginInfo 함수 실행하여 token decode할라고 보냄
+                getLoginInfo();
+            }
+            
+        });
+
+        // reply 사용 시 token decode --> nickname 부여하기 위해 
+        function getLoginInfo() {
+            $.ajax({
+                type: 'POST',
+                url: '/api/loginInfo', 
+                data: {token : localStorage.getItem("token")},
+                success: function (response) {
+                    var userInfo = response.userInfo.userInfo;  
+                    $("#userNum").val(userInfo.userNum);
+                    $("#nickname").val(userInfo.nickname); 
+                    // login한 user nickname 화면 표시   
+                }
+            })
+        }
+
+
         function sendscript() {
+            var userNum = $('#userNum').val();
             var title = $('#title').val();
-            var name = $('#name').val();
+            var nickname = $('#nickname').val();
             var comment = $('#comment').val();
             var password = $('#password').val();
+
             $.ajax({
                 type: 'POST',
                 url: '/api/write', //routes/board --> write get
                 // dataType : JSON, // dataType : JSON 설정시 Err 발생.
                 data: {
+                    userNum : userNum,
                     title : title,
-                    name : name,
+                    nickname : nickname,
                     comment : comment,
                     password : password},
                 success: function (response) {
                     // console.log(response)
-                    alert("등록!")
+                    alert("등록 완료!")
                     location.href = '/list.html'         
                 }
             })
@@ -34,6 +60,11 @@
     </script>
 </head>
 <body>
+    <div>
+        <input id="userNum" type="hidden" value="">
+        <input id="email" type="hidden" value="">
+        
+    </div>
     <div class="board_wrap">
         <div class="board_title">
             <strong>게시판</strong>
@@ -49,11 +80,11 @@
                 <div class="info">
                     <dl>
                         <dt>글쓴이</dt>
-                        <dd><input type="text" placeholder="글쓴이 입력" id="name"></dd>
+                        <dd><input type="text" placeholder="글쓴이 입력" id="nickname" class="nickname" disabled></dd>
                     </dl>
                     <dl>
-                        <dt>비밀번호</dt>
-                        <dd><input type="password" placeholder="비밀번호 입력" id="password"></dd>
+                        <dt>비밀번호</dt>=""
+                        <dd><input type="password" placeholder="비밀번호 입력"  id="password"></dd>
                     </dl>
                 </div>
                 <div class="cont">

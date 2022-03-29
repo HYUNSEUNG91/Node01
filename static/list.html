@@ -11,7 +11,7 @@
             crossorigin="anonymous"></script>
     <script>
         var idToken = localStorage.getItem("token");
-        console.log(idToken);
+        console.log('idToken 발행 완료');
 
         //page loading 완료 후 function list 함수 실행
         $(document).ready(function () {
@@ -37,10 +37,10 @@
                     var str = "";
                     for(var i=0;i<boardList.length;i++){
                         str+='<div>';
-                        str+='<div class="num">'+boardList[i].userId+'</div>';
+                        str+='<div class="num">'+boardList[i].boardNum+'</div>';
                         // title click --> localhost3000/view.html?userId=userId[i]
-                        str+='<div class="title"><a href=/view.html?userId='+boardList[i].userId+'>'+boardList[i].title+'</a></div>';
-                        str+='<div class="writer">'+boardList[i].name+'</div>';
+                        str+='<div class="title"><a href=/view.html?boardNum='+boardList[i].boardNum+'>'+boardList[i].title+'</a></div>';
+                        str+='<div class="writer">'+boardList[i].nickname+'</div>';
                         str+='<div class="date">'+boardList[i].data+'</div>';
                         // delete button
                         // str+='<div><button onclick="sendDelete('+boardList[i].userId+')">삭제</button></div>'
@@ -65,19 +65,7 @@
             }            
             
         }
-        // // list.html --> router/delete --> ajax로 삭제 요청
-        // function sendDelete(delUserId){
-        //     console.log(delUserId);
-        //     $.ajax({
-        //         type: 'GET',
-        //         url: '/api/delete',
-        //         data: {userId : delUserId},
-        //         success: function (response) {
-        //             alert("삭제완료");
-        //             location.href=""; // page 새로고침
-        //         }
-        //     })
-        // }   
+ 
     </script>
 </head>
 <body>

@@ -83,6 +83,13 @@
                 회원가입
               </button>
             </div>
+            <div class="col-6 pl-2">
+              <button
+                type="button"
+                class="btn btn-outline-sparta btn-block"
+                onclick="window.location.href='/'"
+              >
+                둘러보기
           </div>
         </div>
       </div>
@@ -162,8 +169,8 @@
             password: password,
           },
           success: function (response) {
-            localStorage.setItem("token", response.token);
-            
+            localStorage.setItem("token", response.token); //setItem --> 보내줌
+            // Alert('로그인 완료!');
             window.location.replace("/list.html");
           },
           error: function (error) {

@@ -26,6 +26,7 @@ var db = mongoose
 
 const writeRouter = require("./routes/board"); // ./는 상대경로. routes에 board 파일 가져옴
 const userRouter = require("./routes/user_info")
+const replyRouter = require("./routes/reply")
 
 
 
@@ -41,7 +42,7 @@ app.use(express.static("static"))
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(requestMiddleware);
-app.use("/api", [writeRouter, userRouter]);
+app.use("/api", [writeRouter, userRouter], [replyRouter]);
 app.use("/api", express.urlencoded({ extended: false }), router);
 //api 라우터로 들어왔을때만 goodsRouter를 실행한다. [goodsRouter,..] 처럼 2개도 가능.
 
