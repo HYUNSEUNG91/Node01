@@ -212,20 +212,25 @@
                 var loginUserNum = $("#loginUserNum").val();   // login user
                 // var userNum = $('#userNum').val();  // relpy user
                 console.log('relpy dele login->',loginUserNum, 'relpy dele user->',userNum)
-                if(loginUserNum !== userNum){
+                if(Number(loginUserNum) !== Number(userNum)){
                     alert('댓글 작성자만 삭제할 수 있습니다.')
                     location.reload();
                     return;
                 }else if(loginUserNum == userNum){
-                    $.ajax({
-                    type: 'DELETE',
-                    url: `/api/replydelete/${replyNum}`,
-                    data: {replyNum : replyNum},
-                        success: function (response) {
-                            alert("댓글 삭제완료");
-                            location.reload();
-                        }
-                    })
+                    if(confirm("댓글을 삭제하시겠습니까?") == true){
+                        $.ajax({
+                            type: 'DELETE',
+                            url: `/api/replydelete/${replyNum}`,
+                            data: {replyNum : replyNum},
+                                success: function (response) {
+                                    alert("댓글 삭제완료");
+                                    location.reload();
+                                }
+                            })
+                    }else{
+                        return;
+                    }
+                    
                 } 
             }
         }   
