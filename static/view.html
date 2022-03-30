@@ -150,7 +150,7 @@
                 var nickname = $("#loginnickname").val();
                 var boardNum = $('#boardNum').val()
                 
-                 console.log(userNum,nickname,boardNum)
+                //  console.log(userNum,nickname,boardNum)
                 $.ajax({
                     type: 'POST',
                     url: '/api/reply',
@@ -179,14 +179,9 @@
                 data: {boardNum : boardNum}, //전역변수로 가져옴.
                 success: function (response) {
                     var replyList = response.replyList;
-                    console.log(replyList);
+                    // console.log(replyList);
                     var str = "";
                     for(var i=0;i<replyList.length;i++){
-                        // str += '<div>';
-                        // str += '<div><h3 id="replyNickName">'+replyList[i].nickname+'</h3><h3 id="replyData">'+replyList[i].data+'</h3><div>';
-                        // str += '<div><h3 id="reply">'+replyList[i].reply+'</h3><div>'
-                        // str += '<div><button onclick="replyDelete('+replyList[i].replyNum+','+replyList[i].userNum+')">삭제</button><div>'
-                        // str += '</div>';
                         str +='<table>';
                         str +=   '<tr>';
                         str +=        '<td><h3 id="replyNickName">'+replyList[i].nickname+'</h3></td> <td> <h3 id="replyData">'+replyList[i].data+'</h3></td>' ;
@@ -208,33 +203,25 @@
         // Reply 삭제
         function replyDelete(replyNum,userNum){
             //로그인한 사람의 userNum = 리플에 저장된 userNum
-            var loginUserNum = $("#loginUserNum").val();   // login user
-            var userNum = $('#userNum').val();  // relpy user
-            console.log('relpy dele login->',loginUserNum, 'relpy dele user->',userNum)
-
             if (!localStorage.getItem("token")) {
                 alert('로그인 후 이용하세요');
                 location.reload();
                 return;
-            }else if(localStorage.getItem("token")){
-                $.ajax({
-                type: 'post',
-                url: `/api/replyInfo/${replyNum}`,
-                data: {},
-                success: function (response) {
-                    console.log(response.replyInfo)
-                    
-                }
-            })
-                if($('#loginUserNum').val() == $('#userNum').val()){
+            }
+            if(localStorage.getItem("token")){
+                var loginUserNum = $("#loginUserNum").val();   // login user
+                // var userNum = $('#userNum').val();  // relpy user
+                console.log('relpy dele login->',loginUserNum, 'relpy dele user->',userNum)
+                if(loginUserNum !== userNum){
+                    alert('댓글 작성자만 삭제할 수 있습니다.')
+                    location.reload();
+                    return;
+                }else if(loginUserNum == userNum){
                     $.ajax({
                     type: 'DELETE',
                     url: `/api/replydelete/${replyNum}`,
-                    data: {
-                            replyNum : replyNum
-                            },
+                    data: {replyNum : replyNum},
                         success: function (response) {
-                            console.log(response)
                             alert("댓글 삭제완료");
                             location.reload();
                         }
@@ -250,8 +237,11 @@
 <body>
     <input id="userNum" type="hidden" value="">
     <input id="loginUserNum" type="hidden" value="">
+    <input id="relpyUserNum" type="hidden" value="">
     <input id="boardNum" type="hidden" value="">
     <input id="loginnickname" type="hidden"/>
+
+    
     <!-- <input type="hidden"  id="viewUserNum" > -->
     <input type="hidden"  id="password2" >
     <div class="board_wrap">

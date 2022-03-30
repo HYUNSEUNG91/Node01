@@ -11,6 +11,10 @@ router.post("/reply", async (req, res,) => {
     // html ajax --> 내용을 request 함. 
     const {userNum, reply, boardNum, nickname} = req.body;
     console.log('router->reply->',{userNum, reply, boardNum, nickname})
+    if (reply == "" || reply == undefined || reply == null){
+      res.send({Message : '댓글을 내용을 입력하세요.'})
+      return;
+    }
   
     // 내림차순 정렬
     const replyList = await Reply.find({replyNum}).sort({ "replyNum": -1 });
@@ -27,6 +31,7 @@ router.post("/reply", async (req, res,) => {
     // console.log(sendwrite);
   });
   
+  //reply 가져오기
   router.post("/replyList", async (req, res,) => {
     try {
       const {boardNum} = req.body;
@@ -39,26 +44,18 @@ router.post("/reply", async (req, res,) => {
   }
   });
 
-  router.post("/replyInfo/:replyNum", async (req, res,) => {
-    const {replyNum} = req.body;
-    const replyInfo = await Reply.findOne({replyNum})
-    res.json({
-      replyInfo
-    })
-  });
+
 
   
   router.delete("/replydelete/:replyNum", async (req, res,) => {
     const {replyNum, boardNum} = req.body;
-    const replyInfo = await Reply.find({replyNum})
-    res.json({
-      replyInfo
-    })
-
+    const replyInfo = await Reply.findOne({replyNum})
+    // res.json({
+    //   replyInfo
+    // })
     // console.log(replyNum);
     const deleteReply = await Reply.deleteOne({replyNum:replyNum});
     // console.log(sendwrite);
-  
     res.json({deleteReply : deleteReply}); 
     // console.log(sendwrite);
   });
