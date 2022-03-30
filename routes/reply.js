@@ -44,16 +44,26 @@ router.post("/reply", async (req, res,) => {
   }
   });
 
+  // Reply Modify
+  router.post("/replyModify/:replyNum", async (req, res,) => {
+    const {replyNum,reply} = req.body;
+
+    let today = new Date();
+    let data = today.toLocaleString();
+    
+    const replyModify = await Reply.updateOne({replyNum:replyNum},{reply:reply},{data:data});
+    // console.log(sendwrite);
+    res.json({replyModify : replyModify}); 
+    // console.log(sendwrite);
+  });
+
 
 
   
   router.delete("/replydelete/:replyNum", async (req, res,) => {
-    const {replyNum, boardNum} = req.body;
-    const replyInfo = await Reply.findOne({replyNum})
-    // res.json({
-    //   replyInfo
-    // })
-    // console.log(replyNum);
+    const {replyNum} = req.body;
+    // const replyInfo = await Reply.findOne({replyNum})
+   
     const deleteReply = await Reply.deleteOne({replyNum:replyNum});
     // console.log(sendwrite);
     res.json({deleteReply : deleteReply}); 

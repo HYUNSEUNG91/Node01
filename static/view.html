@@ -143,7 +143,7 @@
                 alert('로그인 후 이용하세요');
                 location.reload();
             }else if(localStorage.getItem("token")){
-                var reply = $('#reply').val();
+                var reply = $('#replysend').val();
                 // userNum = login userNum
                 var userNum = $("#loginUserNum").val();  
                 // var nickname = getLoginInfo($("#loginnickname").val(nickname))
@@ -183,12 +183,18 @@
                     var str = "";
                     for(var i=0;i<replyList.length;i++){
                         str +='<table>';
-                        str +=   '<tr>';
-                        str +=        '<td><h3 id="replyNickName">'+replyList[i].nickname+'</h3></td> <td> <h3 id="replyData">'+replyList[i].data+'</h3></td>' ;
-                        str +=        '<td><button onclick="replyDelete('+replyList[i].replyNum+','+replyList[i].userNum+')">삭제</button></td>';
+                        str += '<tr>';
+                        str += '<td><h3 id="NickName_'+i+'">'+replyList[i].nickname+'</h3></td> <td> <h3 id="replyData_'+i+'">'+replyList[i].data+'</h3></td>';
+                        str += '<td><button id="replyModify_'+i+'" onclick="replyModify('+replyList[i].replyNum+','+replyList[i].userNum+','+i+')">수정하기</button></td>';
+
+                        str += '<td><button style="display:none" id="replyModiSave_'+i+'" onclick="replyModiSave('+replyList[i].replyNum+','+replyList[i].userNum+','+i+'">저장하기</button></td>';
+                        str += '<td><button style="display:none" id="replyModiCancle_'+i+'" onclick="replyModiCancle('+replyList[i].replyNum+','+replyList[i].userNum+','+i+')">취소하기</button></td>';
+
+                        str += '<td><button id="replyDelete_'+i+'" onclick="replyDelete('+replyList[i].replyNum+','+replyList[i].userNum+','+i+')">삭제하기</button></td>';
+                       
                         str +='</tr>';
                         str +='<tr>';
-                        str +='<td colspan="3"><h3 id="reply">'+replyList[i].reply+'</h3></td>';
+                        str += '<input type="text" id="reply_'+i+'"class="reply" placeholder="'+replyList[i].reply+','+i+'" disabled>'
                         str +='</tr>';
                         str +='</table>';
                         // tr = table row, td = table
@@ -199,6 +205,62 @@
                 
             })
         }
+        
+        // Reply button
+            function replyModify(replyNum, userNum,idx) {
+                var reply = $('#reply_'+idx).val();
+
+                if (!localStorage.getItem("token")) {
+                    alert('로그인 후 이용하세요');
+                    location.reload();
+                    return;
+                }
+                if(localStorage.getItem("token")){
+                    var loginUserNum = $("#loginUserNum").val();   // login user
+                    console.log('relpy dele login->',loginUserNum, 'relpy modi user->',userNum)
+                    if(Number(loginUserNum) !== Number(userNum)){
+                        alert('댓글 작성자만 수정할 수 있습니다.')
+                        location.reload();
+                        return;
+                    }else if(loginUserNum == userNum){
+                        console.log(idx);
+                        $("#reply_"+idx).attr("disabled", false);
+                        $("#replyModify_"+idx).hide();
+                        $("#replyDelete_"+idx).hide();
+                        $("#replyModiSave_"+idx).show();
+                        $("#replyModiCancle_"+idx).show();
+                    }  
+                }
+            }   
+
+        // // Reply button
+        // function replyModify(replyNum, userNum,idx) {
+        //     var reply = $('#reply_'+idx).val();
+
+        //     if (!localStorage.getItem("token")) {
+        //         alert('로그인 후 이용하세요');
+        //         location.reload();
+        //         return;
+        //     }
+        //     if(localStorage.getItem("token")){
+        //         var loginUserNum = $("#loginUserNum").val();   // login user
+        //         console.log('relpy dele login->',loginUserNum, 'relpy modi user->',userNum)
+        //         if(Number(loginUserNum) !== Number(userNum)){
+        //             alert('댓글 작성자만 수정할 수 있습니다.')
+        //             location.reload();
+        //             return;
+        //         }else if(loginUserNum == userNum){
+        //             console.log(idx);
+        //             $("#reply_"+idx).attr("disabled", false);
+        //             $("#replyModify_"+idx).hide();
+        //             $("#replyDelete_"+idx).hide();
+        //             $("#replyModiSave_"+idx).show();
+        //             $("#replyModiCancle_"+idx).show();
+        //         }  
+        //     }
+        // }   
+
+
 
         // Reply 삭제
         function replyDelete(replyNum,userNum){
@@ -285,7 +347,8 @@
             <div>
                 <h1>댓글</h1>
                     <div>
-                        <input placeholder="댓글 입력" id="reply" style="width : 90%;"/>
+                        <input placeholder="댓글 입력" id="replysend" style="width : 90%;"/>
+                        
                         <button onclick="reply_save()">댓글달기</button>
                     </div>
 
