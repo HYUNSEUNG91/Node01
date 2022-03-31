@@ -19,8 +19,6 @@ const decoded = jwt.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXN0Ijp0cnV
     var emailReg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
 
     
-
-    // nickname 길이 check
     if(data.nickname == undefined || data.nickname == null ||data.nickname == ""){
         result.msg ="닉네임을 입력해주세요."; // 회원가입 API --> res.send로 전달
         result.result=false;
