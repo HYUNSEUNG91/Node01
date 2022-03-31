@@ -47,14 +47,14 @@ router.post("/reply", async (req, res,) => {
   // Reply Modify
   router.post("/replyModify/:replyNum", async (req, res,) => {
     const {replyNum,reply} = req.body;
+    console.log(replyNum, reply)
 
     let today = new Date();
     let data = today.toLocaleString();
     
-    const replyModify = await Reply.updateOne({replyNum:replyNum},{reply:reply},{data:data});
-    // console.log(sendwrite);
+    const replyModify = await Reply.updateOne({replyNum:replyNum},{reply:reply , data:data});
+
     res.json({replyModify : replyModify}); 
-    // console.log(sendwrite);
   });
 
 
@@ -69,11 +69,5 @@ router.post("/reply", async (req, res,) => {
     res.json({deleteReply : deleteReply}); 
     // console.log(sendwrite);
   });
-
-
-
-
-
-
 
 module.exports = router; //router를 모듈로 내보낸다.
