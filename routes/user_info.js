@@ -130,11 +130,19 @@ router.post("/auth", async (req,res) => {
 // 로그인 후 유져 데이터 필요할 때 사용.
 router.post("/loginInfo", async (req, res) => {
     const {token} = req.body;
-        // console.log(jwt.decode(token))
-
+    // console.log(token)
+    const tokende = jwt.decode(token)
+    // console.log(tokende)
+    // console.log(tokende.userInfo.userNum)
+    var userNum = tokende.userInfo.userNum
+    // console.log(tokende.userInfo.nickname)
+    var nickname = tokende.userInfo.nickname
+    const userInfo = {userNum,nickname}
+    // console.log(userInfo)
+        
     res.json({
         // 작성자와 보고있는 사람 일치여부 확인하기 위해 decode해서 화면으로 보냄.
-        userInfo : jwt.decode(token)
+        userInfo : userInfo
     })
 });
 

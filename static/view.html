@@ -32,10 +32,10 @@
                 url: '/api/loginInfo', 
                 data: {token : localStorage.getItem("token")},
                 success: function (response) {
-                    // console.log(response)
+                    console.log(response.userInfo)
                     // 게시글 수정, 삭제 시 로그인 이용자와 글작성 유저와 비교하기 위해 가져옴.
-                    var userNum = response.userInfo.userInfo.userNum;
-                    var nickname = response.userInfo.userInfo.nickname;    
+                    var userNum = response.userInfo.userNum;
+                    var nickname = response.userInfo.nickname;    
                     console.log('getLoginInfo->userNum',userNum,'getLoginInfo->nickname',nickname)      
                     $("#loginUserNum").val(userNum);  
                     // $("#nickname").val(nickname);

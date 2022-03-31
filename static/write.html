@@ -24,7 +24,7 @@
                 url: '/api/loginInfo', 
                 data: {token : localStorage.getItem("token")},
                 success: function (response) {
-                    var userInfo = response.userInfo.userInfo;  
+                    var userInfo = response.userInfo;  
                     $("#userNum").val(userInfo.userNum);
                     $("#nickname").val(userInfo.nickname); 
                     // login한 user nickname 화면 표시   
