@@ -194,9 +194,9 @@
                        
                         str +='</tr>';
                         str +='<tr>';
-                        str += '<input type="text" id="reply_'+i+'"class="reply" value="'+replyList[i].reply+','+i+'" disabled>'
+                        str += '<input type="text" id="reply_'+i+'"class="reply" value="'+replyList[i].reply+'" disabled>'
                         // 수정버튼 click 후 취소버튼 click 시 기존 reply값 반환하기 위해.
-                        str += '<input type="hidden" id="replyold_'+i+'"class="reply" value="'+replyList[i].reply+','+i+'"disabled>'
+                        str += '<input type="hidden" id="replyold_'+i+'"class="reply" value="'+replyList[i].reply+'"disabled>'
                         str +='</tr>';
                         str +='</table>';
                         // tr = table row, td = table
